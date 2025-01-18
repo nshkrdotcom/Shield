@@ -1,4 +1,632 @@
-```
+You've provided incredibly valuable and detailed feedback! I've incorporated your suggestions to further refine the SHIELD specification. Here's the revised draft, addressing each point and maintaining IETF style and technical conformity:
+
+**Internet-Draft**                                               NSHkr
+**Intended status:** Standards Track                             **January 18, 2025**
+**Expires:** July 18, 2025
+
+# SHIELD: A Secure Hierarchical Inter-Agent Layer for Distributed Environments
+
+## Abstract
+
+   This document specifies the Secure Hierarchical Inter-agent Layer
+   for Distributed Environments (SHIELD), a framework for secure
+   communication between autonomous AI agents. SHIELD provides a
+   layered security architecture based on zero-trust principles,
+   incorporating quantum-resistant cryptography, capability-based
+   access control, and secure sandboxing. This specification defines
+   agent identity, secure channel establishment, capability management,
+   and audit mechanisms.
+
+## Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF). Note that other groups may also distribute
+   working documents as Internet-Drafts. The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time. It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on July 18, 2025.
+
+## Copyright Notice
+
+   Copyright (c) 2025 IETF Trust and the persons identified as the
+   document authors. All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (https://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document. Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document. Code Components extracted from this document must
+   include Revised BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Revised BSD License.
+
+## Table of Contents
+
+   [TOC]
+
+## 1. Introduction
+
+   This document specifies the Secure Hierarchical Inter-agent Layer
+   for Distributed Environments (SHIELD) framework. SHIELD provides a
+   comprehensive security architecture for communication between
+   autonomous AI agents in distributed, potentially untrusted,
+   environments.
+
+### 1.1. Motivation
+
+   The increasing use of autonomous AI agents in distributed systems
+   presents significant security challenges. Agents may need to
+   communicate and collaborate across organizational boundaries,
+   utilizing diverse platforms and potentially adversarial
+   environments. Existing security protocols often fall short in
+   addressing these challenges, particularly in the face of emerging
+   threats like quantum computing.
+
+   SHIELD addresses these challenges by providing:
+
+   *   A zero-trust security model with continuous authentication and
+       authorization.
+   *   Quantum-resistant cryptographic algorithms for secure identity
+       and communication.
+   *   A hierarchical, layered architecture for defense in depth.
+   *   Fine-grained, capability-based access control for managing agent
+       permissions.
+   *   Secure sandboxing mechanisms for isolating agent execution.
+   *   Comprehensive audit and compliance features for monitoring and
+       verification.
+
+### 1.2. Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+   NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+   "MAY", and "OPTIONAL" in this document are to be interpreted as
+   described in BCP 14 [RFC2119] [RFC8174] when, and only when, they
+   appear in all capitals, as shown here.
+
+## 2. Terminology
+
+   This section defines the key terms used throughout the SHIELD
+   specification.
+
+   *   **Agent:**  An autonomous software entity that can perceive its
+       environment, make decisions, and act to achieve its goals.
+
+   *   **Agent Identifier (AgentID):**  A globally unique identifier for
+       an agent, as defined in Section 4.1.
+
+   *   **Capability:**  A transferable, delegatable, and attenuatable
+       token that grants specific permissions to an agent.
+
+   *   **Sandbox:**  A restricted execution environment that isolates an
+       agent's operations and limits its access to system resources.
+
+   *   **Secure Agent Runtime (SAR):**  The component responsible for
+       enforcing security policies within a sandbox.
+
+   *   **Channel:**  A secure communication path between two agents.
+
+   *   **Quantum-Resistant Identity Protocol (QRIP):**  A protocol for
+       establishing and managing agent identities using post-quantum
+       cryptography.
+
+   *   **Cross-Sandbox Protocol (XSP):** A protocol for securely transferring agents between different sandboxing environments.
+
+   *   **Audit Chain:**  An immutable, tamper-evident log of security-
+       relevant events.
+
+## 3. Core Architecture
+
+### 3.1. Design Principles
+
+   SHIELD is built upon the following core design principles:
+
+   1. **Zero Trust:**
+       *   No agent, system, or environment is implicitly trusted.
+       *   All interactions MUST be continuously authenticated and
+           authorized.
+       *   Access to resources MUST be granted based on the principle
+           of least privilege.
+       *   All security protocols and verifications MUST be done with the assumption that components, users, and resources may have already been compromised.
+
+   2. **Hierarchical Security:**
+       *   Security controls MUST be organized in a layered structure.
+       *   Each layer MUST have clearly defined security responsibilities.
+       *   Layers MUST operate independently but cooperatively.
+       *   Security failures in one layer SHOULD be contained and
+           MUST NOT compromise the entire system.
+
+   3. **Future-Proofing:**
+       *   SHIELD MUST use quantum-resistant cryptographic algorithms.
+       *   The architecture MUST be modular to allow for algorithm
+           upgrades and the integration of new security technologies.
+       *   Protocols MUST be extensible to support future security
+           requirements.
+
+### 3.2. Layer Structure
+
+   SHIELD's architecture consists of the following layers:
+
+   1. **Physical Security Layer (L1):**
+       *   Provides the foundation for security through hardware
+           mechanisms.
+       *   Implementations SHOULD use hardware security modules (HSMs)
+           and secure enclaves (e.g., TPM, TEE) where available.
+       *   Systems MUST ensure physical isolation of critical
+           components.
+       *   This layer MAY provide hardware attestation mechanisms.
+       *   **Note:** Consider adding a mention of secure boot processes and the need to protect against physical tampering.
+
+   2. **Identity and Authentication Layer (L2):**
+       *   Responsible for managing agent identities and authentication.
+       *   Implementations MUST use the Quantum-Resistant Identity
+           Protocol (QRIP) as defined in Section 4.2.
+       *   This layer MUST support multi-signature schemes for
+           organizational control over agents.
+       *   Provides certificate lifecycle management.
+
+   3. **Secure Channel Layer (L3):**
+       *   Establishes and maintains secure communication channels
+           between agents.
+       *   Implementations MUST use the protocols defined in Section 5.
+       *   Provides confidentiality, integrity, and authenticity for
+           inter-agent messages.
+
+   4. **Capability Control Layer (L4):**
+       *   Manages and enforces capability-based access control.
+       *   Agents MUST use capability tokens to access resources and
+           interact with other agents.
+       *   The structure and usage of capability tokens are defined in
+           Section 6.
+       *   The system MUST provide secure delegation of all agent capabilities, even through multiple tiers, via the Delegation Chain method (detailed in 6.3)
+
+   5. **Sandbox Execution Layer (L5):**
+       *   Provides secure runtime environments for agent execution.
+       *   Each sandbox MUST implement a Secure Agent Runtime (SAR) as
+           defined in Section 7.1.
+       *   Sandboxes MUST ensure resource isolation and code
+           verification.
+       *   Supports secure agent transfer between sandboxes via the
+           Cross-Sandbox Protocol (XSP) defined in Section 7.3.
+       *   Ensures all agents are verified via the agent's key signature, all security for communications is set up properly (including forward secrecy), and the transferred agent is executed in the new environment prior to completion of handoff.
+
+   6. **Audit and Compliance Layer (L6):**
+       *   Provides mechanisms for logging, monitoring, and verifying
+           security-relevant events.
+       *   All implementations MUST maintain an immutable Audit Chain
+           as defined in Section 8.
+       *   Supports real-time security monitoring and incident
+           response.
+
+   **Interactions Between Layers:**
+
+   The following table illustrates some key interactions between the layers:
+
+   | Layer                 | Interacts With          | Interaction Description                                                                                                                               |
+   | :-------------------- | :--------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | Secure Channel (L3)   | Identity (L2)          | Uses AgentIDs from L2 to authenticate agents during channel establishment.                                                                              |
+   | Capability Control (L4)| Identity (L2)          | Capability tokens are associated with AgentIDs from L2.                                                                                                 |
+   | Capability Control (L4)| Secure Channel (L3)   | Capabilities may be requested and granted during channel establishment or subsequently over an established channel.                                      |
+   | Sandbox (L5)          | Capability Control (L4)| The SAR in L5 enforces capabilities from L4.                                                                                                           |
+   | Sandbox (L5)          | Secure Channel (L3)   | The SAR mediates communication using secure channels from L3.                                                                                           |
+   | Audit (L6)            | All Layers             | All layers generate audit records that are logged to the Audit Chain in L6.                                                                            |
+   | Physical (L1)         | All Layers             | Provides hardware-based security mechanisms that underpin the security of all other layers. For example, using TPM to ensure secure boot of the system. |
+
+## 4. Identity Management
+
+### 4.1. Agent Identity Structure
+
+   An Agent Identifier (AgentID) uniquely identifies an agent within
+   the SHIELD framework. Each AgentID MUST be globally unique and
+   conform to the following structure (represented as a JSON object):
+
+   ```
+   {
+       "uuid": "UUID-v4",
+       "organization": "String",
+       "role": "String",
+       "version": "Semver",
+       "publicKeys": {
+           "primary": {
+               "algorithm": "dilithium3",
+               "key": "base64_encoded_key",
+               "created": "ISO8601_timestamp",
+               "expires": "ISO8601_timestamp"
+           },
+           "secondary": [{
+               "algorithm": "String",
+               "key": "base64_encoded_key",
+               "created": "ISO8601_timestamp",
+               "expires": "ISO8601_timestamp"
+           }]
+       },
+       "capabilities": ["Array<CapabilityURI>"],
+       "revocationEndpoint": "URI (Format: https://example.com/revocations)",
+       "metadata": {
+           "creation_date": "ISO8601_timestamp",
+           "last_updated": "ISO8601_timestamp",
+           "is_stateless": "Boolean"
+       },
+       "signature": "base64_encoded_signature"
+   }
+   ```
+
+   *   **uuid:**  A version 4 Universally Unique Identifier (UUID)
+       [RFC4122] that uniquely identifies the agent.
+
+   *   **organization:**  A string representing the organization or
+       entity that created or manages the agent. This field SHOULD
+       be used for grouping agents and can be used to implement
+       organizational policies.
+
+   *   **role:** A string defining the agent's role or function (e.g.,
+       "data_analyzer", "system_monitor").
+
+   *   **version:** A string representing the agent's software version,
+       following the Semantic Versioning 2.0.0 specification [SemVer].
+
+   *   **publicKeys:**  An object containing the agent's public keys.
+
+       *   **primary:** The primary public key used for key exchange.
+           The algorithm MUST be a NIST-approved post-quantum algorithm as specified in Appendix A. Uses the CRYSTALS-KYBER-1024 algorithm. This primary key, its capabilities, and all associated agent metadata is signed via the agent signature standard defined in section 4.2. The `algorithm` field is **required** and MUST use a standard algorithm name from a recognized set (e.g., IANA COSE Algorithms registry).
+
+       *   **secondary:** An OPTIONAL array of additional public keys
+           that can be used for signature verification or other
+           purposes. The use of secondary keys for identity-related functions MUST rotate at a cadence no longer than 90-days.
+
+   *   **capabilities:**  An array of URIs representing the initial
+       capabilities granted to the agent at creation. These are
+       represented by `CapabilityURI` strings which can indicate
+       specific capabilities as defined in Section 6. These values are defined within the signed capabilities token, outlined in section 6.
+
+   *   **revocationEndpoint:** A URI pointing to an endpoint that can be
+       queried to check the revocation status of the agent's
+       identity. **Format:** The URI MUST follow a specific format (e.g., HTTPS) and point to a service that implements a standard revocation protocol (e.g., CRL, OCSP).
+
+   *   **metadata:**  An OPTIONAL object containing additional
+       information about the agent.
+       *  **creation_date:** An ISO8601 timestamp indicating when the identity was created.
+       *  **last_updated:** An ISO8601 timestamp indicating when the identity was last updated.
+       *  **is_stateless:** An optional boolean that if TRUE indicates that the agent can maintain a secure session via a handshake.
+
+   *   **signature:**  A digital signature over the entire AgentID
+       object (except for the signature field itself), ensuring the
+       integrity of the identity. The signature algorithm MUST be a NIST-approved post-quantum signature algorithm as specified in Appendix A. The agent signature algorithm MUST use the CRYSTALS-DILITHIUM-3 algorithm. The signature covers the entire `AgentID` structure, excluding the `signature` field itself.
+
+### 4.2. Quantum-Resistant Identity Protocol (QRIP)
+
+   QRIP governs the creation, management, and verification of agent
+   identities. It uses only NIST-approved post-quantum cryptographic
+   algorithms.
+
+   *   All key generation MUST use algorithms specified in
+       Appendix A.
+   *   Key derivation MUST follow a hierarchical deterministic scheme
+       based on HKDF [RFC5869] using a standard format like BIP32 or SLIP-0010 for the `derivation_path`. The `context` field in the key derivation process MAY include information about the specific application or domain.
+   *   Agent identities MAY support multi-signature schemes. The specific multi-signature scheme (e.g., Schnorr, BLS, or a threshold signature scheme) MUST be specified in the `metadata` of the `AgentID`. Multi-signature policies MUST be defined and enforced through a combination of smart contracts (if applicable) and procedural controls.
+   *   Agent identity signatures MUST use approved algorithms (see Section 4.1).
+
+### 4.3. Identity Verification
+
+   Agents MUST verify the identity of other agents before establishing
+   secure channels or granting access to resources. Verification involves:
+
+   1. Checking the `signature` field of the AgentID object. The signature MUST have been made using a valid cryptographic algorithm specified in Appendix A.
+   2. Verifying that the `signer` of the `signature` field corresponds to either the agent itself or a trusted organization.
+   3. Optionally, if secondary keys are used, retrieving additional public keys to ensure their legitimacy.
+   4. Retrieving and validating the current set of signing keys from the specified `revocationEndpoint`. These values can also be cross-referenced against a list of revoked certificates. The `revocationEndpoint` MUST point to a service that implements a standard revocation protocol (e.g., CRL, OCSP). The response from the revocation endpoint MUST include a `status` field indicating whether the agent is `valid`, `revoked`, or `unknown`. It MAY also include a `proof` of the agent's revocation status (e.g., a proof of inclusion in a CRL or a proof of non-revocation from an OCSP responder).
+
+   Agents SHOULD cache verification results for a limited period to
+   improve performance, taking into account any specified expiration in the AgentID or any information retrieved from a potential revocation list.
+
+## 5. Secure Channels
+
+   Secure channels provide confidential and authenticated communication
+   between agents.
+
+### 5.1. Channel Establishment
+
+   Before establishing a secure channel, agents MUST mutually
+   authenticate each other using the identity verification process
+   described in Section 4.3.
+
+   The channel establishment process follows these steps:
+
+   1. **Initiation:** The initiating agent sends a `ChannelInit`
+       message to the receiving agent. The structure of this message
+       is as follows:
+
+       ```
+       {
+           "initiator": "AgentID",
+           "responder": "AgentID",
+           "timestamp": "ISO8601_timestamp",
+           "initiator_nonce": "base64_encoded_random_bytes",
+           "responder_nonce": "base64_encoded_random_bytes",
+           "session_parameters": {
+               "proposed_duration": "uint32_seconds",
+               "cipher_suites": [{
+                   "key_exchange": "kyber1024",
+                   "signature": "dilithium3",
+                   "encryption": "aes256gcm",
+                   "mac": "hmac-sha3-256"
+               }],
+               "capabilities": ["Array<CapabilityURI>"]
+           },
+           "signature": {
+               "algorithm": "dilithium3",
+               "value": "base64_encoded_signature"
+           }
+       }
+       ```
+
+       *   **initiator:** The AgentID of the initiating agent.
+       *   **responder:** The AgentID of the receiving agent.
+       *   **timestamp:** An ISO8601 timestamp indicating when the message was created.
+       *   **initiator_nonce/responder_nonce:**  Separate random nonces generated by the initiating and responding agent. These MUST be at least 32 bytes (256-bits) to help mitigate the risk of replay attacks.
+       *   **session_parameters:** Proposed session configuration information.
+           *   **proposed_duration:** Number of seconds the agent is requesting to be the channel's length of validity.
+           *   **cipher_suites:** An ordered list of cipher suites supported by the initiating agent. Each cipher suite specifies the algorithms to be used for key exchange, digital signatures, encryption, and MAC. Cipher suites MUST only include NIST-approved post-quantum algorithms. Algorithm names MUST follow a standard format (e.g., IANA COSE Algorithms registry).
+           *   **capabilities:** An optional array of capability URIs that the initiating agent is requesting for the duration of the session. This is based on any capability requirements detailed by the responding agent. If capabilities are requested that the responding agent is unable to verify or the agent doesn't recognize, the channel will not be established. **Note:** Capabilities are handled in a separate message *after* the channel is established to avoid overloading `ChannelInit`.
+       *   **signature:**  A digital signature over the entire `ChannelInit` message, created using the initiating agent's private key.
+
+   2. **Response:** If the receiving agent accepts the channel
+       request, it responds with a signed message containing:
+       *   The chosen cipher suite.
+       *   A newly generated nonce (included in the `responder_nonce` field).
+       *   A signature over the response message, including the received `initiator_nonce` value.
+
+   3. **Key Exchange:** Both agents perform a quantum-resistant key
+       exchange using the agreed-upon key exchange algorithm from the
+       chosen cipher suite. This results in a shared secret key. The specific key exchange algorithm (e.g., Kyber) MUST be specified in the `cipher_suites`.
+
+   4. **Verification:** Both agents verify each other's signatures
+       using the public keys associated with their AgentIDs.
+
+   If any of these steps fail, the channel establishment MUST be
+   aborted. If successful, a secure channel is established using
+   the agreed upon parameters and keys.
+
+### 5.2. Session Management
+
+   Each secure channel is associated with a unique session, identified by a `session_id`. The `SessionConfig` structure defines the session parameters:
+
+   ```
+   {
+       "session_id": "UUID",
+       "created": "ISO8601_timestamp",
+       "expires": "ISO8601_timestamp",
+       "rekeying_policy": {
+           "time_interval": "uint32_seconds",
+           "message_count": "uint32",
+           "data_volume": "uint64_bytes",
+           "explicit_request": "Boolean"
+       },
+       "perfect_forward_secrecy": {
+           "enabled": "Boolean",
+           "mechanism": "ECDHE"
+       }
+   }
+   ```
+
+   *   **session_id:**  A UUID that uniquely identifies the session.
+   *   **created:** An ISO8601 timestamp indicating when the session was
+       created.
+   *   **expires:** An ISO8601 timestamp indicating when the session
+       expires. This value MUST be derived from when the agent signature will expire, or when that key is set to expire based on that agent's revocation policies (whichever is sooner).
+   *   **rekeying_policy:**  Defines when session keys should be
+       regenerated. Any of the three conditions (`time_interval`,
+       `message_count`, `data_volume`) being met will trigger
+       rekeying. If rekeying is required, all prior keys associated with that agent will be destroyed. Rekeying operations are to be done per the specification outlined in 5.1 and re-verification of identity per 4.3 will be done prior to resuming an established channel after the re-key operation. The policy also includes `explicit_request` which, if set to `true`, allows either agent to initiate a rekeying by sending a `rekey_request` message.
+   *   **perfect_forward_secrecy:** Configuration information to define perfect forward secrecy standards on this particular session. If `enabled` is TRUE, then the agents MUST utilize ECDHE (Elliptic Curve Diffie-Hellman Ephemeral) or DHE (Diffie-Hellman Ephemeral) to further ensure key security. If using X3DH, elaborate more on how the one-time prekeys are managed within the context of SHIELD.
+
+   Session keys MUST be derived from the shared secret using a
+   cryptographically secure key derivation function, such as HKDF
+   [RFC5869].
+
+   Agents MUST NOT reuse session keys for different sessions. Session keys are destroyed on session end or on agent deletion/revocation. Agents MUST discard any stored information associated with an ended session, including nonces, timestamps, etc.
+
+   **Session Termination:** Sessions can be terminated in the following ways:
+
+   *   **Expiration:** When the `expires` timestamp is reached.
+   *   **Rekeying Failure:** If rekeying fails.
+   *   **Explicit Close:** Either agent can send a `session_close` message to terminate the session.
+   *   **Agent Revocation:** If one of the agents involved in the session is revoked.
+
+### 5.3. Message Format
+
+   All messages sent over a secure channel MUST conform to the following format:
+
+   ```
+   {
+       "header": {
+           "sender": "AgentID",
+           "recipient": "AgentID (Optional or Session AID)",
+           "session_id": "UUID",
+           "sequence": "uint64",
+           "timestamp": "ISO8601_timestamp",
+           "message_type": "String",
+           "encryption": {
+               "algorithm": "aes256gcm",
+               "iv": "base64_encoded_iv (96-bit random value for AES-GCM)",
+               "auth_tag": "base64_encoded_tag"
+           }
+       },
+       "payload": "base64_encoded_encrypted_data",
+       "mac": {
+           "algorithm": "hmac-sha3-256",
+           "value": "base64_encoded_mac"
+       }
+   }
+   ```
+
+   *   **header:**  Metadata for the message.
+       *   **sender:** The AgentID of the sending agent.
+       *   **recipient:** The AgentID of the receiving agent. This field MAY be omitted or replaced with a Session AID for privacy, especially in multi-agent scenarios.
+       *   **session_id:** The UUID of the session associated with this
+           channel.
+       *   **sequence:** A monotonically increasing sequence number,
+           unique per session. Sequence numbers protect against replay attacks and help detect missing or out-of-order messages. Sequence numbers are verified upon receipt, with incorrect sequence numbers leading to message failure and record logging. If the sequence number is close to overflowing or has already overflowed, the sending agent will need to perform session key renegotiation.
+       *   **timestamp:** An ISO8601 timestamp indicating when the
+           message was created. Define acceptable clock skew (e.g., +/- 5 minutes).
+       *   **message_type:** A string indicating the type of message
+           (e.g., "command", "response", "event", "capability_grant", "rekey_request", "session_close"). A comprehensive set of standard message types MUST be defined in Appendix B.
+       *   **encryption:**  Information about the encryption algorithm.
+           *   **algorithm:**  The encryption algorithm used (e.g.,
+               "AES-256-GCM"). The encryption algorithm used for agent communications is defined per agent, based on which agent initially set up the secure channel as described in section 5.1 Channel Establishment. If a new channel is set up with that agent, and the agent's preferred algorithm has changed or been deprecated, that same standard will apply.
+           *   **iv:** The base64 encoded initialization vector (IV) or
+               nonce. This will vary based on the chosen encryption algorithm. For AES-GCM, it MUST be a 96-bit random value.
+           *   **auth_tag:** The base64 encoded authentication tag
+               generated by the authenticated encryption algorithm.
+
+   *   **payload:** The base64 encoded, encrypted message payload (the ciphertext).
+
+   *   **mac:**  A Message Authentication Code (MAC) computed over the
+       entire message (header + ciphertext) using the "Encrypt-then-MAC" approach. This ensures message integrity and authenticity. The MAC algorithm MUST be a NIST- approved algorithm as specified in Appendix A.
+
+## 6. Capability Control
+
+   SHIELD uses a capability-based access control model. Agents use
+   capability tokens to authorize actions and access resources.
+
+### 6.1. Capability Token Structure
+
+   Capability tokens MUST be formatted as JSON Web Tokens (JWTs)
+   [RFC7519] and signed using a NIST-approved post-quantum signature
+   algorithm. The following claims are REQUIRED:
+
+   ```
+   {
+       "@context": ["https://www.w3.org/ns/activitystreams", "https://w3id.org/security/v2", "https://shield.dev/v1"],
+       "id": "urn:uuid:unique-capability-id (Resolvable URI)",
+       "controller": "AgentID",
+       "invoker": "AgentID",
+       "parentCapability": "URI",
+       "capability": {
+           "type": "URI (Resolves to capability type definition)",
+           "actions": ["Array<String>"],
+           "target": "URI",
+           "scope": ["Array<String>"]
+       },
+       "constraints": [{
+           "type": "String",
+           "parameters": "Map<String, Any>"
+       }],
+       "proof": {
+           "type": "Ed25519Signature2020",
+           "created": "ISO8601_timestamp",
+           "verificationMethod": "URI (Resolves to public key)",
+           "proofPurpose": "capabilityDelegation or assertionMethod",
+           "proofValue": "base64_encoded_proof"
+       }
+   }
+   ```
+
+   *   **@context:** An array of URIs providing context for the capability token, in this instance pointing to the latest security standards version from w3, as well as any custom values for the SHIELD framework. This helps identify this document as a ZCAP-LD based structure, to simplify machine-readability. The `https://shield.dev/v1` context MUST define the SHIELD-specific vocabulary used in capability tokens (e.g., the capability types, actions, constraint types).
+   *   **id:** A unique URI identifying this capability token. This URI SHOULD be resolvable to the capability token itself.
+   *   **controller:** The AgentID that created the capability. The `controller` is often the same as the `issuer` of the JWT.
+   *   **invoker:** The AgentID that can invoke this capability.
+   *   **parentCapability:** An optional URI for tracking delegated capability sets. This value is populated when a new set of capabilities are delegated, based on section 5.1.
+   *   **capability:** Defines the capability itself:
+       *   **type:** The type of capability, as defined in Section 6.2. This MUST be a URI that resolves to a definition of the capability type.
+       *   **actions:**  An array of actions permitted by this capability (e.g., "read", "write").
+       *   **target:** A URI identifying the resource to which the
+           capability applies.
+       *   **scope:** Further limits or expands on which targets may be accessible. For example, limiting a specific read capability to particular filetypes, even if the `target` is general. This can be a blank field as well, to just utilize the `target` parameter instead.
+   *   **constraints:**  An optional array of constraints on the
+       capability. Constraints can be used to limit the time, location,
+       or other contextual factors under which the capability can be
+       exercised. They contain the following keys:
+       *   **type:** Defines the constraint mechanism used, e.g. timed, count, etc. Standard constraint types MUST be defined (e.g., `temporal`, `spatial`, `resource_limit`, `rate_limit`).
+       *   **parameters:** Further expands on any necessary metadata associated with that particular type, such as what the `expiration` is set to on a timed capability, e.g. "expiration": "ISO8601_timestamp". The structure of `parameters` MUST be defined for each constraint type.
+
+   *   **proof:** Metadata relating to providing proof that the delegated capabilities have not been tampered with.
+       *   **type:** The method for generating the security `proof`.
+       *   **created:** An ISO8601 timestamp for when the proof was generated.
+       *   **verificationMethod:** The unique identifier of the agent delegating these capabilities. This URI MUST resolve to the public key needed to verify the proof.
+       *   **proofPurpose:** The intended purpose of this proof, for logging. This can be `capabilityDelegation` or `assertionMethod`.
+       *   **proofValue:** The security proof itself, which includes a signed copy of the capability token using the `verificationMethod` to do so.
+
+   Implementations MAY define additional claims as needed.
+
+### 6.2. Capability Types and Actions
+
+   SHIELD defines the following standard capability types:
+
+   *   **EXECUTE:** Allows execution of specific operations or code.
+       Permitted actions include `execute_code`, `execute_query`,
+       `execute_function`, `execute_workflow`. Possible constraints include: `resource_limits`, `runtime_environment`.
+
+   *   **READ:**  Allows reading data from a resource. Permitted actions
+       include `read_file`, `read_stream`, `read_database`, `read_memory`.
+       Possible constraints include: `data_classification`, `access_time`.
+
+   *   **WRITE:**  Allows modifying a resource. Permitted actions include
+       `write_file`, `write_stream`, `write_database`, `modify_memory`.
+       Possible constraints include: `data_volume`, `rate_limit`.
+
+   *   **DELEGATE:** Allows delegating capabilities to other agents.
+       Permitted actions include `delegate_capability`, `revoke_capability`,
+       `modify_capability`. Possible constraints include: `delegation_depth`,
+       `time_limit`.
+
+   *   **COMMUNICATE:** Allows establishing communication channels and
+       sending messages. Permitted actions include `establish_channel`,
+       `send_message`, `broadcast_message`. Possible constraints
+       include: `bandwidth_limit`, `recipient_scope`.
+
+   *   **SANDBOX:** Allows creating and managing sandboxes. Permitted
+       actions include `create_sandbox`, `modify_sandbox`, `transfer_agent`.
+       Possible constraints include: `resource_quota`, `isolation_level`.
+
+   Implementations MAY define additional capability types as needed.
+   Implementations MUST only use specified types to ensure a common set of expectations are used during channel negotiations as defined in section 5.1. Each capability type MUST have a well-defined set of actions and constraints.
+
+### 6.3. Delegation Chain
+
+   Capabilities can be delegated from one agent to another. The
+   delegation chain is tracked through the `parentCapability` and proof mechanisms.
+
+   *   Each delegation step MUST create a new capability token.
+   *   The `invoker` of a delegated capability becomes the
+       `controller` of the new capability token.
+   *   The `proof` section will be used to track the history of the capability, based on methods outlined in 6.1.
+
+   Agents MUST verify the entire delegation chain before accepting a
+   capability token. Agents will also verify that this follows a least-privilege model. The verification process MUST include:
+
+   1. **Signature Verification:** Verify the signature of each capability token in the chain.
+   2. **Constraint Checks:** Ensure that all constraints are satisfied at each delegation step.
+   3. **Revocation Checks:** Check if any capability in the chain has been revoked.
+   4. **Delegation Depth:** Verify that the delegation depth does not exceed the maximum allowed depth (if specified).
+   5. **Least Privilege:** Ensure that each delegation step adheres to the principle of least privilege.
+
+## 7. Sandbox Security
+
+### 7.1. Secure Agent Runtime (SAR)
+
+   The Secure Agent Runtime (SAR) is a critical component within each
+   sandbox that enforces security policies and manages agent execution.
+   The SAR MUST:
+
+   *   **Enforce Capability-Based Access Control:** The SAR MUST verify
+       and enforce the capabilities presented by agents before allowing
+       any action.
+   *   **Resource Isolation:** The SAR MUST ensure that agents within a
+       sandbox are isolated from each other and from the host system.
+       This includes memory isolation, file system isolation, and
+       network isolation. The SAR MUST use OS-level mechanisms like namespaces and cgroups to achieve isolation. For network isolation, the SAR MUST isolate the network namespace and control network access through a virtual network interface.
+   *   **Code Verification:** Before executing any agent code, the SAR
+       MUST verify its integrity and authenticity using the mechanisms
+       described in Section 7.2.
    *   **Secure Communication:** The SAR MUST mediate all communication
        between agents within the sandbox and between the sandbox and
        the external environment. All communication MUST use the secure
