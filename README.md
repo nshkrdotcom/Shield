@@ -927,6 +927,7 @@ I'll continue with the remaining sections of the SHIELD specification.
         }
     }
 }
+```
 
 ## Appendix B: Cryptographic Algorithms
 
